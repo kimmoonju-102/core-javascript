@@ -1,3 +1,8 @@
+
+import { getNode } from "./getNode.js";
+import { typeError,refError } from "../error/index.js";
+
+
 export function insertBefore(node, text) {
   if (typeof node === 'string') node = getNode(node);
 
