@@ -1,4 +1,5 @@
-function getNode(node){
+
+export function getNode(node){
   if(typeof node !== 'string'){
     throw new Error('getNode 함수의 인자는 문자 타입 이여야 합니다.');
   }
@@ -16,3 +17,6 @@ function getNodes(node){
   
   return document.querySelectorAll(node)
 }
+
+
+

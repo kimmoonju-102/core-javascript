@@ -1,3 +1,4 @@
+
 export function addClass(node,className){
   
   if(typeof node === 'string') node = getNode(node);
