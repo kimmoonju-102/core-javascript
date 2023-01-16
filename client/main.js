@@ -1,5 +1,5 @@
 
-import {clearContents, getInputValue, getNode, getRandom, insertLast, isNumericString,addClass,removeClass } from './lib/index.js'
+import {clearContents, getInputValue, getNode, getRandom, insertLast, isNumericString,addClass,removeClass, showAlert, copy} from './lib/index.js'
 import { jujeobData } from "./data/data.js";
 
 
@@ -26,21 +26,44 @@ function clickSubmitHandler(e){
   if(!name){
     console.log('이름을 입력해 주세요!');
     // 실행되지 않게 return 해서 종료시켜줌
+    showAlert('.alert-error','잘못된 정보입니다.!',2000);
+    // addClass(resultArea, 'shake');
+    // setTimeout(() => {
+    //   removeClass(resultArea, 'shake');
+    // }, 1000);
+
+    // GSAP
+    // gsap.fromTo(resultArea, 0.01, {x:-5}, {x:5, clearProps:"x", repeat:20})
     return
   }
 
   if(isNumericString(name)){
     console.log('제대로된 이름을 입력해주세요.');
+    showAlert('.alert-error','정확한 이름을 입력해주세요!',2000);
     return
+
   }
+
 
   // 랜더링 하기 
   // 유틸함수
   clearContents(resultArea)
   insertLast(resultArea, pick)
-
-
-
 }
 
-submit.addEventListener('click',clickSubmitHandler)
+
+//clickCopyHandler
+function clickCopyHandler() {
+  let text = resultArea.textContent;
+  // navigator.clipboard.writeText('aaa');
+
+  //카피가 완벽하게 됐다면 then을 실행시켜줘
+  copy(text).then(() => {
+    showAlert('.alert-success', '클립보드 복사가 완료되었습니다.' ,2000)
+  })
+}
+
+
+
+submit.addEventListener('click',clickSubmitHandler);
+resultArea.addEventListener('click', clickCopyHandler);
