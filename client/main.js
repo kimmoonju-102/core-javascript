@@ -6,7 +6,9 @@ import {
   getNodes,
   visibleElement,
   invisibleElement,
-  insertLast
+  insertLast,
+  attr,
+  clearContents
  } from "./lib/index.js";
 
 
@@ -38,17 +40,20 @@ const [rollingDiceButton,recordButton,resetButton] = getNodes('.buttonGroup > bu
 const recordListWrapper = getNode('.recordListWrapper')
 
 
-
-
+let count = 0;
+let total = 0;
 function renderRecordListItem(){
+  let diceValue = Number(attr('#cube', 'data-dice'));
+
   let template = /* html */
   `<tr>
-    <td>0</td>
-    <td>5</td>
-    <td>5</td>
+    <td>${count++}</td>
+    <td>${diceValue}</td>
+    <td>${total += diceValue}</td>
   </tr>`
 
   insertLast('.recordListWrapper tbody', template)
+  recordListWrapper.scrollTop = recordListWrapper.scrolHeight
 }
 
 /* -------------------------------------------------------------------------- */
@@ -100,9 +105,13 @@ const handleRecord =()=>{
 
 const handleReset = () => {
 
-  invisibleElement(recordListWrapper)
-}
+  count = 0;
+  total = 0;
+  
+  invisibleElement(recordListWrapper);
+  clearContents('.recordListWrapper tbody')
 
+}
 
 
 // handlerRollingDice 실행시키면 함수 본문 전체가 실행됌. 그래서 실행실행을 시켜야 함
