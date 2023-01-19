@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 export const memo = (() => {
   const cache = {}
 
@@ -24,7 +17,7 @@ export const memo = (() => {
 
 
 
-// memo('name',()=>'tiger')
+memo('name',()=>'tiger')
 // memo('name')
 
 // console.log(memo('name',()=>'tttt'));
@@ -37,12 +30,3 @@ export const memo = (() => {
 
 
 // console.log( memo()('cube') );
-
-
-
-
-
-
-
-
-
