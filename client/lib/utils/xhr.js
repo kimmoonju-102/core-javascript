@@ -8,6 +8,7 @@
   4 : complete -> 완료
 */
 
+import { typeError } from "../error/typeError.js";
 // 아 xhr에서 원하는 값만 뽑아와서 그걸 그대로 변수이름처럼 쓴거군여
 // xhrData 함수 만들기 method, url
 //               구조 분해 할당 -> 초기값을 지정할 수 있다.
@@ -56,6 +57,7 @@ export function xhrData({
       onFail('통신실패')
     }
   })
+  //문자화 (JSON.stringify(body));
   // 서버에 요청
   xhr.send(JSON.stringify(body));
 }
@@ -115,6 +117,93 @@ xhrData.delete = (url, body, onSuccess, onFail) => {
 
 
 
+// promise API
+
+const defaultOptions = {
+  url:'',
+  method:'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  },
+  body:null
+}
+
+
+
+export function xhrPromise() {
+  const xhr = new XMLHttpRequest();
+
+  const {method, url, body, headers} = Object.assign({}, defaultOptions);
+  
+  if(!url) typeError('서버와 통신할 url 인자는 반드시 필요합니다.');
+
+  xhr.open(method, url);
+
+  xhr.send(body ? JSON.stringify(body) : null)
+  
+  //return 해서 promise 객체가 튀어나감
+  return new Promise((resolve, reject) => {
+    // 실행자 안에 addEventListener
+    xhr.addEventListener('readystatechange',()=>{
+      const {status, readyState, response} = xhr;
+
+      if(status >= 200 && status < 400){
+        // readyState: 4번 
+        if(readyState === 4){
+          // 맞을때 response을 가져오는거임
+          resolve(JSON.parse(response));
+        }
+      }else{
+        reject('에러입니다');
+      }
+    })
+  })
+}
+
+// xhrPromise({
+//   url:'https://jsonplaceholder.typicode.com/users/1'
+// })
+// .then((res)=>{
+//   console.log(res);
+// })
+// .catch((err)=>{
+//   console.log(err);
+// })
+
+
+
+xhrPromise.get = (url) => {
+  return xhrPromise({
+    url
+  })
+}
+
+
+xhrPromise.post = (url,body) => {
+  return xhrPromise({
+    url,
+    body,
+    method:'POST'
+  })
+}
+
+
+xhrPromise.put = (url,body) => {
+  return xhrPromise({
+    url,
+    body,
+    method:'PUT'
+  })
+}
+
+
+xhrPromise.delete = (url) => {
+  return xhrPromise({
+    url,
+    method:'DELETE'
+  })
+}
 
 
 
